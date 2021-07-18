@@ -66,11 +66,11 @@ $SplashG2.Location               = New-Object System.Drawing.Point(50,140)
 $SplashG2.Font                   = 'Microsoft Sans Serif,10'
 
 $SplashG3                        = New-Object system.Windows.Forms.Button
-$SplashG3.Text                   = "Coming soon..."
+$SplashG3.Text                   = "SplashSetter"
 $SplashG3.Width                  = 90 
 $SplashG3.Height                 = 30
 $SplashG3.Location               = New-Object System.Drawing.Point(50,200)
-$SplashG3.Font                   = 'Microsoft Sans Serif,8'
+$SplashG3.Font                   = 'Microsoft Sans Serif,9'
 
 $SplashG4                        = New-Object system.Windows.Forms.Button
 $SplashG4.Text                   = "Coming soon..."
@@ -102,6 +102,14 @@ $SplashG2.Add_Click({
      Get-ChildItem  $env:APPDATA"\GIMP\2.10" -Include *.* -Recurse | foreach { $_.Delete()} | Out-Host
      Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Hoseasack/SplashSetter/main/stary%20night.png" -OutFile $env:APPDATA"\GIMP\2.10\splashes\starrynight.png" -UseBasicParsing | Out-Host
     if($?) { Write-Host "Installed PhotoGIMP 2020 Splash" }
+})
+
+$SplashG3.Add_Click({
+     Write-Host "Installing SplashSetter Splash"
+     Set-Location $env:APPDATA"\GIMP\2.10\splashes" | Out-Host
+     Get-ChildItem  $env:APPDATA"\GIMP\2.10" -Include *.* -Recurse | foreach { $_.Delete()} | Out-Host
+     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Hoseasack/SplashSetter/main/SplashSetter.png" -OutFile $env:APPDATA"\GIMP\2.10\splashes\splashsetter.png" -UseBasicParsing | Out-Host
+    if($?) { Write-Host "Installed SplashSetter Splash" }
 })
 
 $undobutton1.Add_Click({
