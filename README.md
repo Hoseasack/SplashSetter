@@ -9,3 +9,11 @@ Just download the script from the "[Releases](https://github.com/Hoseasack/Splas
 
 ## Is this safe?
 This script does not change nor touch any system files. This is also a portable script.
+
+## What's next?
+
+- Add more splashes
+- Add more programs
+- Add image caching
+- Add local file support
+- ...
