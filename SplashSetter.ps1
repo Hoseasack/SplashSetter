@@ -10,11 +10,13 @@ If (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]:
 	Exit
 }
 
+New-Item -Path $env:APPDATA"\GIMP\2.10\splashes" -ItemType Directory | Out-Host
+
 # GUI Specs
 
 $Form                            = New-Object system.Windows.Forms.Form
 $Form.ClientSize                 = New-Object System.Drawing.Point(300,500)
-$Form.text                       = "SplashSetter v1.0"
+$Form.text                       = "SplashSetter v1.2"
 $Form.StartPosition              = "CenterScreen"
 $Form.TopMost                    = $false
 $Form.BackColor                  = "#FFFFFF"
@@ -35,7 +37,7 @@ $Picture                         = New-Object system.Windows.Forms.PictureBox
 $Picture.width                   = 200
 $Picture.height                  = 125
 $Picture.location                = New-Object System.Drawing.Point(300,300)
-$Picture.imageLocation           = "https://hoseasack.weebly.com/uploads/1/2/4/0/124064601/published/hoseasack-logo.png?1609943484"
+$Picture.imageLocation           = "https://hoseasack.weebly.com/uploads/1/2/4/0/124064601/published/hoseasack-logo.png"
 
 $Title1                          = New-Object system.Windows.Forms.Label
 $Title1.text                     = "GIMP"
@@ -44,8 +46,8 @@ $Title1.location                 = New-Object System.Drawing.Point(50,10)
 $Title1.Font                     = New-Object System.Drawing.Font('Microsoft Sans Serif',24)
 
 $Text                            = New-Object system.Windows.Forms.Label
-$Text.text                       = "If you have any suggestions for more
-splashes or programs, create 
+$Text.text                       = "If you have any suggestions for
+more splashes or programs, create 
 an issue on GitHub."
 $Text.AutoSize                   = $true
 $Text.location                   = New-Object System.Drawing.Point(300,150)
@@ -86,10 +88,17 @@ $undobutton1.Height              = 30
 $undobutton1.Location            = New-Object System.Drawing.Point(50,400)
 $undobutton1.Font                = 'Microsoft Sans Serif,10'
 
-$Form.controls.AddRange(@($Picture, $Title1, $Text, $undobutton1, $SplashG1, $SplashG2, $SplashG3, $SplashG4))
+$install                         = New-Object system.Windows.Forms.Button
+$install.text                    = "Install"
+$install.Width                   = 90
+$install.Height                  = 30 
+$install.Location                = New-Object System.Drawing.Point(300,200)
+$install.Font                    = 'Microsoft Sans Serif,10'
+
+$Form.controls.AddRange(@($Picture, $Title1, $Text, $undobutton1, $install, $SplashG1, $SplashG2, $SplashG3, $SplashG4))
 
 $SplashG1.Add_Click({
-     Write-Host "Installing PhotoGIMP 2020 Splash"
+     Write-Host "Installing PhotoGIMP 2020 Splash..."
      Set-Location $env:APPDATA"\GIMP\2.10\splashes" | Out-Host
      Get-ChildItem  $env:APPDATA"\GIMP\2.10" -Include *.* -Recurse | foreach { $_.Delete()} | Out-Host
      Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Diolinux/PhotoGIMP/master/.var/app/org.gimp.GIMP/config/GIMP/2.10/splashes/photogimp-diolinux-splash.png" -OutFile $env:APPDATA"\GIMP\2.10\splashes\photogimp2020.png" -UseBasicParsing | Out-Host
@@ -97,7 +106,7 @@ $SplashG1.Add_Click({
 })
 
 $SplashG2.Add_Click({
-     Write-Host "Installing Starry Night Splash"
+     Write-Host "Installing Starry Night Splash..."
      Set-Location $env:APPDATA"\GIMP\2.10\splashes" | Out-Host
      Get-ChildItem  $env:APPDATA"\GIMP\2.10" -Include *.* -Recurse | foreach { $_.Delete()} | Out-Host
      Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Hoseasack/SplashSetter/main/stary%20night.png" -OutFile $env:APPDATA"\GIMP\2.10\splashes\starrynight.png" -UseBasicParsing | Out-Host
@@ -105,7 +114,7 @@ $SplashG2.Add_Click({
 })
 
 $SplashG3.Add_Click({
-     Write-Host "Installing SplashSetter Splash"
+     Write-Host "Installing SplashSetter Splash..."
      Set-Location $env:APPDATA"\GIMP\2.10\splashes" | Out-Host
      Get-ChildItem  $env:APPDATA"\GIMP\2.10" -Include *.* -Recurse | foreach { $_.Delete()} | Out-Host
      Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Hoseasack/SplashSetter/main/SplashSetter.png" -OutFile $env:APPDATA"\GIMP\2.10\splashes\splashsetter.png" -UseBasicParsing | Out-Host
@@ -113,14 +122,23 @@ $SplashG3.Add_Click({
 })
 
 $undobutton1.Add_Click({
-     Write-Host "Removing custom GIMP splashes"
+     Write-Host "Removing custom GIMP splashes..."
      Set-Location $env:APPDATA"\GIMP\2.10\splashes" | Out-Host
      Get-ChildItem  $env:APPDATA"\GIMP\2.10" -Include *.* -Recurse | foreach { $_.Delete()} | Out-Host
     if($?) { Write-Host "Removed all custom GIMP splashes" }
 })
 
+$install.Add_Click({
+     Write-Host "Installing SplashSetter..."
+     Set-Location $env:APPDATA | Out-Host
+     New-Item $env:APPDATA"\SplashSetter" -ItemType directory | Out-Host
+     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Hoseasack/SplashSetter/main/SplashSetter.ps1" -OutFile $env:APPDATA"\SplashSetter\SplashSetter.ps1" -UseBasicParsing | Out-Host
+     $WshShell = New-Object -comObject WScript.Shell
+     $Shortcut = $WshShell.CreateShortcut("$Home\Desktop\SplashSetter.lnk")
+     $Shortcut = $WshShell.CreateShortcut("$env:APPDATA\Microsoft\Windows\Start Menu\Programs\SplashSetter.lnk")
+     $Shortcut.TargetPath = "$env:APPDATA\SplashSetter\SplashSetter.ps1"
+     $Shortcut.Save()
+     Write-Host "Installed SplashSetter"
+})
+
 [void]$Form.ShowDialog()
-
-
-
-
